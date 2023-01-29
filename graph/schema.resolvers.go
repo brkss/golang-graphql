@@ -13,12 +13,26 @@ import (
 
 // CreateTodo is the resolver for the createTodo field.
 func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
+	
 	panic(fmt.Errorf("not implemented: CreateTodo - createTodo"))
 }
 
 // Todos is the resolver for the todos field.
 func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: Todos - todos"))
+	todo := model.Todo{
+		ID: "id-1",
+		Text: "finish graphql example !", 
+		Done: false,
+		User: &model.User {
+			ID: "user-1",
+			Name: "Brahim!",
+		},	
+	}
+	response := []*model.Todo{
+		&todo,
+	}
+	return response, nil; 
+	//panic(fmt.Errorf("not implemented: Todos - todos"))
 }
 
 // Mutation returns MutationResolver implementation.
