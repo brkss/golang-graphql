@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -11,6 +12,7 @@ import (
 	db "github.com/brkss/golang-graphql/db/sqlc"
 	"github.com/brkss/golang-graphql/directives"
 	"github.com/brkss/golang-graphql/graph"
+	"github.com/brkss/golang-graphql/utils"
 	_ "github.com/lib/pq"
 )
 
@@ -23,6 +25,14 @@ const (
 
 func main() {
 	
+
+	// load config 
+	config, err := utils.LoadConfig()
+	if err != nil {
+		log.Fatal("cannot load config : ", err)
+	}
+
+	fmt.Printf("%+v\n", config)
 
 	con, err := sql.Open(dbDriver, dbSource)
 	if err != nil {
