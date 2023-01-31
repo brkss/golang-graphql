@@ -7,17 +7,15 @@ package graph
 import (
 	"context"
 
+	db "github.com/brkss/golang-graphql/db/sqlc"
 	"github.com/brkss/golang-graphql/graph/model"
+	"github.com/brkss/golang-graphql/utils"
 	validator "github.com/go-playground/validator/v10"
+	"github.com/google/uuid"
 )
 
 // Register is the resolver for the register field.
 func (r *mutationResolver) Register(ctx context.Context, input *model.RegisterUserInput) (*model.RegisterUserResponse, error) {
-	/*
-		err := validate.Var(input.Email, "require,email")
-		if err != nil {
-			return nil, err
-		}
 
 		hash, err := utils.HashPassword(input.Password)
 		if err != nil {
@@ -40,10 +38,10 @@ func (r *mutationResolver) Register(ctx context.Context, input *model.RegisterUs
 			Name:     user.Name,
 			Email:    user.Email,
 			Username: user.Username,
-		}*/
+		}
 	return &model.RegisterUserResponse{
 		Status: true,
-		//User:   &response,
+		User:   &response,
 	}, nil
 }
 
