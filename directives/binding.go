@@ -10,25 +10,23 @@ import (
 )
 
 
-var validate *validator.Validate;
-
+var validate = validator.New() 
 
 func Binding(ctx context.Context, obj interface{}, next graphql.Resolver, constraint string)(interface{}, error) {
-	fmt.Println("constraint : ", constraint)
-	//val, _ := next(ctx);
-	/*
+	//fmt.Println("constraint : ", constraint)
+	val, err := next(ctx);
 	if err != nil {
 		panic(err)
 	}
 
 	fieldName := *graphql.GetPathContext(ctx).Field
 
+	fmt.Println("val : ", val)
+	fmt.Println("constraint : ", constraint)
 	err = validate.Var(val, constraint)
 	if err != nil {
-		error := fmt.Errorf("%s%+v", fieldName, err.Error())
-		return val,error 
+		e := fmt.Errorf("%s : invalid entry", fieldName)
+		return val, e 
 	}
-	*/
-	return next(ctx)
-
+	return next(ctx) 
 }
