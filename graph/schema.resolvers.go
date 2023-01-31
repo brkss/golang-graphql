@@ -6,36 +6,65 @@ package graph
 
 import (
 	"context"
-	//"fmt"
+	"database/sql"
 
+	db "github.com/brkss/golang-graphql/db/sqlc"
 	"github.com/brkss/golang-graphql/graph/model"
+	"github.com/google/uuid"
 )
 
 // CreateRecipeCategiory is the resolver for the CreateRecipeCategiory field.
 func (r *mutationResolver) CreateRecipeCategiory(ctx context.Context, input *model.CreateRecipeCategoryInput) (*model.CreateCategoryResponse, error) {
-	
 	if input.Title == "" || input.Image == "" {
 		err := "Invalid Data !"
 		return &model.CreateCategoryResponse{
-			Status: false,
-			Message:  &err,
+			Status:  false,
+			Message: &err,
 		}, nil
 	}
 
+	arg := db.CreateCategoryParams{
+		ID:    uuid.New().String(),
+		Title: input.Title,
+		Image: input.Image,
+		Active: sql.NullBool{
+			Valid: true,
+			Bool:  input.Active,
+		},
+	}
+
+	category, err := r.Store.CreateCategory(context.Background(), arg)
+	if err != nil {
+		error := err.Error()
+		return &model.CreateCategoryResponse{
+			Status:  false,
+			Message: &error,
+		}, err
+	}
+
+	result := model.RecipeCategory{
+		ID:     category.ID,
+		Title:  category.Title,
+		Image:  category.Image,
+		Active: category.Active.Bool,
+	}
+
 	return &model.CreateCategoryResponse{
-		Status: false,	
+		Status:   true,
+		Category: &result,
 	}, nil
+}
+
+// Ping is the resolver for the ping field.
+func (r *queryResolver) Ping(ctx context.Context) (string, error) {
+	return "Pong", nil
 }
 
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
-type mutationResolver struct{ *Resolver }
+// Query returns QueryResolver implementation.
+func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
 
-// !!! WARNING !!!
-// The code below was going to be deleted when updating resolvers. It has been copied here so you have
-// one last chance to move it out of harms way if you want. There are two reasons this happens:
-//   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
-//     it when you're done.
-//   - You have helper methods in this file. Move them out to keep these resolver files clean.
+type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }

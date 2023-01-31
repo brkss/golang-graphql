@@ -21,6 +21,10 @@ input CreateRecipeCategoryInput {
 	active: Boolean!
 }
 
+type Query {
+	ping: String!
+}
+
 type Mutation {
 	CreateRecipeCategiory(input: CreateRecipeCategoryInput): CreateCategoryResponse!
 }
