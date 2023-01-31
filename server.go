@@ -9,6 +9,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	db "github.com/brkss/golang-graphql/db/sqlc"
+	"github.com/brkss/golang-graphql/directives"
 	"github.com/brkss/golang-graphql/graph"
 	_ "github.com/lib/pq"
 )
@@ -30,15 +31,15 @@ func main() {
 
 	store := db.NewStore(con)
 
-
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
 	}
 
-	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{
-		Store: store,
-	}}))
+	c := graph.Config{Resolvers: &graph.Resolver{ Store: store }}
+	c.Directives.Binding = directives.Binding
+
+	srv := handler.NewDefaultServer(graph.NewExecutableSchema(c))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/query", srv)

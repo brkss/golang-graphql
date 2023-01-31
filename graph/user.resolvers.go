@@ -6,44 +6,51 @@ package graph
 
 import (
 	"context"
-	"fmt"
 
-	db "github.com/brkss/golang-graphql/db/sqlc"
 	"github.com/brkss/golang-graphql/graph/model"
-	"github.com/go-playground/validator/v10"
-	"github.com/google/uuid"
+	validator "github.com/go-playground/validator/v10"
 )
-
-var validate *validator.Validate
 
 // Register is the resolver for the register field.
 func (r *mutationResolver) Register(ctx context.Context, input *model.RegisterUserInput) (*model.RegisterUserResponse, error) {
-	
-	err := validate.Var(input.Email, "require,email")
-	if err != nil {
-		return nil, err
-	}
+	/*
+		err := validate.Var(input.Email, "require,email")
+		if err != nil {
+			return nil, err
+		}
 
-	arg := db.RegisterUserParams{
-		ID: uuid.New().String(),
-		Name: input.Name,
-		Email: input.Email,
-		Username: input.Username,
-		Password: input.Password,
-	}
+		hash, err := utils.HashPassword(input.Password)
+		if err != nil {
+			return nil, err
+		}
+		arg := db.RegisterUserParams{
+			ID:       uuid.New().String(),
+			Name:     input.Name,
+			Email:    input.Email,
+			Username: input.Username,
+			Password: hash,
+		}
 
-	user, err := r.Store.RegisterUser(ctx, arg)
-	if err != nil {
-		return nil, err
-	}
-	response := model.User{
-		ID: user.ID,
-		Name: user.Name,
-		Email: user.Email,
-		Username: user.Username,
-	} 	
+		user, err := r.Store.RegisterUser(ctx, arg)
+		if err != nil {
+			return nil, err
+		}
+		response := model.User{
+			ID:       user.ID,
+			Name:     user.Name,
+			Email:    user.Email,
+			Username: user.Username,
+		}*/
 	return &model.RegisterUserResponse{
 		Status: true,
-		User: &response,
+		//User:   &response,
 	}, nil
 }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//     it when you're done.
+//   - You have helper methods in this file. Move them out to keep these resolver files clean.
+var validate *validator.Validate
