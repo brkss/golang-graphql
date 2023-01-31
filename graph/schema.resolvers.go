@@ -33,7 +33,7 @@ func (r *mutationResolver) CreateRecipeCategiory(ctx context.Context, input *mod
 		},
 	}
 
-	category, err := r.Store.CreateCategory(context.Background(), arg)
+	category, err := r.Store.CreateCategory(ctx, arg)
 	if err != nil {
 		error := err.Error()
 		return &model.CreateCategoryResponse{
@@ -58,6 +58,24 @@ func (r *mutationResolver) CreateRecipeCategiory(ctx context.Context, input *mod
 // Ping is the resolver for the ping field.
 func (r *queryResolver) Ping(ctx context.Context) (string, error) {
 	return "Pong", nil
+}
+
+// Categories is the resolver for the categories field.
+func (r *queryResolver) Categories(ctx context.Context) ([]*model.RecipeCategory, error) {
+	categories, err := r.Store.GetCategories(ctx)
+	if err != nil {
+		return []*model.RecipeCategory{}, err 
+	}
+	var results []*model.RecipeCategory;
+	for _, category := range categories {
+		results = append(results, &model.RecipeCategory{
+			ID: category.ID,
+			Image: category.Image,
+			Title: category.Title,
+			Active: category.Active.Bool,
+		})
+	}
+	return results, nil
 }
 
 // Mutation returns MutationResolver implementation.

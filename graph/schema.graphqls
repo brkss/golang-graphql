@@ -23,6 +23,7 @@ input CreateRecipeCategoryInput {
 
 type Query {
 	ping: String!
+	categories: [RecipeCategory!]!
 }
 
 type Mutation {
