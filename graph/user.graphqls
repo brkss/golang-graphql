@@ -1,18 +1,18 @@
 
+directive @binding(constraint: String!) on INPUT_FIELD_DEFINITION | ARGUMENT_DEFINITION
 
 type User {
-	id: ID!,
+	id: ID! ,
 	name: String!
 	email: String!
 	username: String!
-	password: String!
 }
 
 input RegisterUserInput {
-	name: String!
-	email: String!
-	username: String!
-	password: String!
+	name: String! @binding(constraint: "required")
+	email: String! @binding(constraint: "required,email")
+	username: String! @binding(constraint: "required,min=5")
+	password: String! @binding(constraint: "required,min=5")
 }
 
 type RegisterUserResponse {
