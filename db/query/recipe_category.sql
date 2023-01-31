@@ -7,6 +7,6 @@ VALUES ( $1, $2, $3, $4 )
 RETURNING *;
 
 
--- name: GetCategories :one
+-- name: GetCategories :many
 SELECT * FROM recipe_categories
 ORDER BY id;

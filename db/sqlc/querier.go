@@ -10,7 +10,7 @@ import (
 
 type Querier interface {
 	CreateCategory(ctx context.Context, arg CreateCategoryParams) (RecipeCategory, error)
-	GetCategories(ctx context.Context) (RecipeCategory, error)
+	GetCategories(ctx context.Context) ([]RecipeCategory, error)
 }
 
 var _ Querier = (*Queries)(nil)

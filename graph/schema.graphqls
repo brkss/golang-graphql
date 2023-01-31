@@ -2,29 +2,25 @@
 #
 # https://gqlgen.com/getting-started/
 
-type Todo {
-	id: ID!
-	text: String!
-	done: Boolean!
-	user: User!
+type RecipeCategory {
+	id:	ID!
+	title: String!
+	image: String!
+	active: Boolean!
 }
 
-type User {
-	id: ID!
-	name: String!
+type CreateCategoryResponse {
+	status: Boolean!
+	message: String
+	category: RecipeCategory
 }
 
-type Query {
-	todos: [Todo!]!
-	getClients: [Client!]!
-}
-
-input NewTodo {
-text: String!
-		  userId: String!
+input CreateRecipeCategoryInput {
+	title: String!
+	image: String!
+	active: Boolean!
 }
 
 type Mutation {
-	createTodo(input: NewTodo!): Todo!
-	createClient(input: NewClient!): User!
+	CreateRecipeCategiory(input: CreateRecipeCategoryInput): CreateCategoryResponse!
 }

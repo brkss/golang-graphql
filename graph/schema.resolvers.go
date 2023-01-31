@@ -6,49 +6,36 @@ package graph
 
 import (
 	"context"
-	"fmt"
+	//"fmt"
 
 	"github.com/brkss/golang-graphql/graph/model"
 )
 
-// CreateTodo is the resolver for the createTodo field.
-func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	panic(fmt.Errorf("not implemented: CreateTodo - createTodo"))
-}
-
-// CreateClient is the resolver for the createClient field.
-func (r *mutationResolver) CreateClient(ctx context.Context, input model.NewClient) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: CreateClient - createClient"))
-}
-
-// Todos is the resolver for the todos field.
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	todo := model.Todo{
-		ID:   "id-1",
-		Text: "finish graphql example !",
-		Done: false,
-		User: &model.User{
-			ID:   "user-1",
-			Name: "Brahim!",
-		},
+// CreateRecipeCategiory is the resolver for the CreateRecipeCategiory field.
+func (r *mutationResolver) CreateRecipeCategiory(ctx context.Context, input *model.CreateRecipeCategoryInput) (*model.CreateCategoryResponse, error) {
+	
+	if input.Title == "" || input.Image == "" {
+		err := "Invalid Data !"
+		return &model.CreateCategoryResponse{
+			Status: false,
+			Message:  &err,
+		}, nil
 	}
-	response := []*model.Todo{
-		&todo,
-	}
-	return response, nil
-	//panic(fmt.Errorf("not implemented: Todos - todos"))
-}
 
-// GetClients is the resolver for the getClients field.
-func (r *queryResolver) GetClients(ctx context.Context) ([]*model.Client, error) {
-	panic(fmt.Errorf("not implemented: GetClients - getClients"))
+	return &model.CreateCategoryResponse{
+		Status: false,	
+	}, nil
 }
 
 // Mutation returns MutationResolver implementation.
 func (r *Resolver) Mutation() MutationResolver { return &mutationResolver{r} }
 
-// Query returns QueryResolver implementation.
-func (r *Resolver) Query() QueryResolver { return &queryResolver{r} }
-
 type mutationResolver struct{ *Resolver }
+
+// !!! WARNING !!!
+// The code below was going to be deleted when updating resolvers. It has been copied here so you have
+// one last chance to move it out of harms way if you want. There are two reasons this happens:
+//   - When renaming or deleting a resolver the old code will be put in here. You can safely delete
+//     it when you're done.
+//   - You have helper methods in this file. Move them out to keep these resolver files clean.
 type queryResolver struct{ *Resolver }

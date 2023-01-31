@@ -2,32 +2,21 @@
 
 package model
 
-type Client struct {
-	ID       string  `json:"id"`
-	Name     string  `json:"name"`
-	Email    string  `json:"email"`
-	Password *string `json:"password"`
+type CreateCategoryResponse struct {
+	Status   bool            `json:"status"`
+	Message  *string         `json:"message"`
+	Category *RecipeCategory `json:"category"`
 }
 
-type NewClient struct {
-	Name     string `json:"name"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
+type CreateRecipeCategoryInput struct {
+	Title  string `json:"title"`
+	Image  string `json:"image"`
+	Active bool   `json:"active"`
 }
 
-type NewTodo struct {
-	Text   string `json:"text"`
-	UserID string `json:"userId"`
-}
-
-type Todo struct {
-	ID   string `json:"id"`
-	Text string `json:"text"`
-	Done bool   `json:"done"`
-	User *User  `json:"user"`
-}
-
-type User struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+type RecipeCategory struct {
+	ID     string `json:"id"`
+	Title  string `json:"title"`
+	Image  string `json:"image"`
+	Active bool   `json:"active"`
 }

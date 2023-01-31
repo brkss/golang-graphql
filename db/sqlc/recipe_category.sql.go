@@ -41,19 +41,35 @@ func (q *Queries) CreateCategory(ctx context.Context, arg CreateCategoryParams) 
 	return i, err
 }
 
-const getCategories = `-- name: GetCategories :one
+const getCategories = `-- name: GetCategories :many
 SELECT id, title, image, active FROM recipe_categories
 ORDER BY id
 `
 
-func (q *Queries) GetCategories(ctx context.Context) (RecipeCategory, error) {
-	row := q.db.QueryRowContext(ctx, getCategories)
-	var i RecipeCategory
-	err := row.Scan(
-		&i.ID,
-		&i.Title,
-		&i.Image,
-		&i.Active,
-	)
-	return i, err
+func (q *Queries) GetCategories(ctx context.Context) ([]RecipeCategory, error) {
+	rows, err := q.db.QueryContext(ctx, getCategories)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []RecipeCategory{}
+	for rows.Next() {
+		var i RecipeCategory
+		if err := rows.Scan(
+			&i.ID,
+			&i.Title,
+			&i.Image,
+			&i.Active,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
