@@ -15,12 +15,18 @@ input RegisterUserInput {
 	password: String! @binding(constraint: "required,min=5")
 }
 
-type RegisterUserResponse {
+type AuthResponse{
 	status: Boolean!
 	message: String
-	user: User
+	token: String
+}
+
+input LoginUserInput {
+	ident: String! @binding(constraint: "required")
+	password: String! @binding(constraint: "required")
 }
 
 extend type Mutation {
-	register(input: RegisterUserInput): RegisterUserResponse!
+	register(input: RegisterUserInput): AuthResponse!
+	login(input: LoginUserInput): AuthResponse!
 }

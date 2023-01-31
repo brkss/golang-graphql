@@ -2,6 +2,12 @@
 
 package model
 
+type AuthResponse struct {
+	Status  bool    `json:"status"`
+	Message *string `json:"message"`
+	Token   *string `json:"token"`
+}
+
 type CreateCategoryResponse struct {
 	Status   bool            `json:"status"`
 	Message  *string         `json:"message"`
@@ -12,6 +18,11 @@ type CreateRecipeCategoryInput struct {
 	Title  string `json:"title"`
 	Image  string `json:"image"`
 	Active bool   `json:"active"`
+}
+
+type LoginUserInput struct {
+	Ident    string `json:"ident"`
+	Password string `json:"password"`
 }
 
 type RecipeCategory struct {
@@ -26,12 +37,6 @@ type RegisterUserInput struct {
 	Email    string `json:"email"`
 	Username string `json:"username"`
 	Password string `json:"password"`
-}
-
-type RegisterUserResponse struct {
-	Status  bool    `json:"status"`
-	Message *string `json:"message"`
-	User    *User   `json:"user"`
 }
 
 type User struct {
