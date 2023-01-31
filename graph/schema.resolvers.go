@@ -64,14 +64,14 @@ func (r *queryResolver) Ping(ctx context.Context) (string, error) {
 func (r *queryResolver) Categories(ctx context.Context) ([]*model.RecipeCategory, error) {
 	categories, err := r.Store.GetCategories(ctx)
 	if err != nil {
-		return []*model.RecipeCategory{}, err 
+		return []*model.RecipeCategory{}, err
 	}
-	var results []*model.RecipeCategory;
+	var results []*model.RecipeCategory
 	for _, category := range categories {
 		results = append(results, &model.RecipeCategory{
-			ID: category.ID,
-			Image: category.Image,
-			Title: category.Title,
+			ID:     category.ID,
+			Image:  category.Image,
+			Title:  category.Title,
 			Active: category.Active.Bool,
 		})
 	}

@@ -8,6 +8,9 @@ DB_PORT = 5432
 DB_HOST = localhost
 
 
+all:
+	@echo "Please spicify which makefile recipe !"
+
 startdb:
 	docker start $(DB_CONTAINER)
 

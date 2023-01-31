@@ -1,0 +1,26 @@
+
+
+type User {
+	id: ID!,
+	name: String!
+	email: String!
+	username: String!
+	password: String!
+}
+
+input RegisterUserInput {
+	name: String!
+	email: String!
+	username: String!
+	password: String!
+}
+
+type RegisterUserResponse {
+	status: Boolean!
+	message: String
+	user: User
+}
+
+extend type Mutation {
+	register(input: RegisterUserInput): RegisterUserResponse!
+}

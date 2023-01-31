@@ -20,3 +20,24 @@ type RecipeCategory struct {
 	Image  string `json:"image"`
 	Active bool   `json:"active"`
 }
+
+type RegisterUserInput struct {
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+type RegisterUserResponse struct {
+	Status  bool    `json:"status"`
+	Message *string `json:"message"`
+	User    *User   `json:"user"`
+}
+
+type User struct {
+	ID       string `json:"id"`
+	Name     string `json:"name"`
+	Email    string `json:"email"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+}

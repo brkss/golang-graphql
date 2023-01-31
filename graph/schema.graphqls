@@ -2,12 +2,16 @@
 #
 # https://gqlgen.com/getting-started/
 
+# Objects  
+
 type RecipeCategory {
 	id:	ID!
 	title: String!
 	image: String!
 	active: Boolean!
 }
+
+
 
 type CreateCategoryResponse {
 	status: Boolean!
