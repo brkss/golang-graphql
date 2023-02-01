@@ -2,16 +2,15 @@
 #
 # https://gqlgen.com/getting-started/
 
-# Objects  
+directive @auth on FIELD_DEFINITION
 
+# Objects  
 type RecipeCategory {
 	id:	ID!
 	title: String!
 	image: String!
 	active: Boolean!
 }
-
-
 
 type CreateCategoryResponse {
 	status: Boolean!
@@ -26,7 +25,7 @@ input CreateRecipeCategoryInput {
 }
 
 type Query {
-	ping: String!
+	ping: String! @auth()
 	categories: [RecipeCategory!]!
 }
 

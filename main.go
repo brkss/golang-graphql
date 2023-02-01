@@ -52,18 +52,21 @@ func main() {
 		port = defaultPort
 	}
 
+	
+
+	// implementing chi as http handler ! 
+	router := chi.NewRouter()
+	
 	c := graph.Config{Resolvers: &graph.Resolver{ 
 		Store: store,
 		Maker: maker,
 		Config: config,
 	}}
-	c.Directives.Binding = directives.Binding
-
-
-	// implementing chi as http handler ! 
-
-	router := chi.NewRouter()
 	
+	// Directives !
+	c.Directives.Binding = directives.Binding
+	c.Directives.Auth = directives.Auth
+
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(c))
 
 	// setup middleware

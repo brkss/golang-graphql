@@ -33,25 +33,24 @@ func (r *mutationResolver) Register(ctx context.Context, input *model.RegisterUs
 	if err != nil {
 		return nil, err
 	}
-	
-	token, err := r.Maker.CreateToken(user.ID, r.Config.TokenDuration) 
+
+	token, err := r.Maker.CreateToken(user.ID, r.Config.TokenDuration)
 	if err != nil {
 		return nil, err
 	}
 	return &model.AuthResponse{
 		Status: true,
-		Token: &token,
+		Token:  &token,
 	}, nil
 }
 
 // Login is the resolver for the login field.
 func (r *mutationResolver) Login(ctx context.Context, input *model.LoginUserInput) (*model.AuthResponse, error) {
-
 	user, err := r.Store.GetUserByIdent(ctx, input.Ident)
 	if err != nil {
-		msg := "User not found !"		
+		msg := "User not found !"
 		return &model.AuthResponse{
-			Status: false,
+			Status:  false,
 			Message: &msg,
 		}, nil
 	}
@@ -60,21 +59,20 @@ func (r *mutationResolver) Login(ctx context.Context, input *model.LoginUserInpu
 	if err != nil {
 		msg := "Invalid Password !"
 		return &model.AuthResponse{
-			Status: false,
+			Status:  false,
 			Message: &msg,
-		}, nil 
+		}, nil
 	}
 
 	// generate token !
-	token, err := r.Maker.CreateToken(user.ID, r.Config.TokenDuration) 
+	token, err := r.Maker.CreateToken(user.ID, r.Config.TokenDuration)
 	if err != nil {
 		return nil, err
 	}
 	return &model.AuthResponse{
 		Status: true,
-		Token: &token,
+		Token:  &token,
 	}, nil
-
 }
 
 // !!! WARNING !!!
