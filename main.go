@@ -70,7 +70,7 @@ func main() {
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(c))
 
 	// setup middleware
-	router.Use(middleware.AuthMiddleware())
+	router.Use(middleware.AuthMiddleware(maker))
 
 	router.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	router.Handle("/query", srv)

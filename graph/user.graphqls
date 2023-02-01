@@ -26,6 +26,10 @@ input LoginUserInput {
 	password: String! @binding(constraint: "required")
 }
 
+extend type Query {
+	Me: User! @auth()
+}
+
 extend type Mutation {
 	register(input: RegisterUserInput): AuthResponse!
 	login(input: LoginUserInput): AuthResponse!
