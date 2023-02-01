@@ -29,12 +29,15 @@ func (r *mutationResolver) Register(ctx context.Context, input *model.RegisterUs
 	}
 
 	// user needed while generating token !
-	_, err = r.Store.RegisterUser(ctx, arg)
+	user, err := r.Store.RegisterUser(ctx, arg)
 	if err != nil {
 		return nil, err
 	}
-
-	token := "token placeholder !"
+	
+	token, err := r.Maker.CreateToken(user.ID, r.Config.TokenDuration) 
+	if err != nil {
+		return nil, err
+	}
 	return &model.AuthResponse{
 		Status: true,
 		Token: &token,
@@ -63,7 +66,10 @@ func (r *mutationResolver) Login(ctx context.Context, input *model.LoginUserInpu
 	}
 
 	// generate token !
-	token := "token placeholder !"
+	token, err := r.Maker.CreateToken(user.ID, r.Config.TokenDuration) 
+	if err != nil {
+		return nil, err
+	}
 	return &model.AuthResponse{
 		Status: true,
 		Token: &token,
