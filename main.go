@@ -11,8 +11,10 @@ import (
 	db "github.com/brkss/golang-graphql/db/sqlc"
 	"github.com/brkss/golang-graphql/directives"
 	"github.com/brkss/golang-graphql/graph"
+	middleware "github.com/brkss/golang-graphql/middlewares"
 	"github.com/brkss/golang-graphql/token"
 	"github.com/brkss/golang-graphql/utils"
+	"github.com/go-chi/chi/v5"
 	_ "github.com/lib/pq"
 )
 
@@ -57,11 +59,23 @@ func main() {
 	}}
 	c.Directives.Binding = directives.Binding
 
+
+	// implementing chi as http handler ! 
+
+	router := chi.NewRouter()
+	
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(c))
 
-	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/query", srv)
+	// setup middleware
+	router.Use(middleware.AuthMiddleware())
+
+	router.Handle("/", playground.Handler("GraphQL playground", "/query"))
+	router.Handle("/query", srv)
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", port)
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	err = http.ListenAndServe(":"+port, router)
+	if err != nil {
+		log.Fatal("cannot start server ! : ", err)
+	}
+	//log.Fatal(http.ListenAndServe(":"+port, nil))
 }
