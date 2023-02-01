@@ -12,6 +12,7 @@ import (
 	db "github.com/brkss/golang-graphql/db/sqlc"
 	"github.com/brkss/golang-graphql/directives"
 	"github.com/brkss/golang-graphql/graph"
+	"github.com/brkss/golang-graphql/token"
 	"github.com/brkss/golang-graphql/utils"
 	_ "github.com/lib/pq"
 )
@@ -32,9 +33,13 @@ func main() {
 		log.Fatal("cannot load config : ", err)
 	}
 
-	fmt.Printf("%+v\n", config)
+	// create paseto maker 
+	maker, err := token.NewPasetoMaker(config.TokenSymetricKey)
+	if err != nil {
+		log.Fatal("cannot create token maker : ", err)
+	}
 
-	con, err := sql.Open(dbDriver, dbSource)
+	con, err := sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {
 		log.Fatal("cannot connect to database : ", err)
 	}
@@ -46,7 +51,11 @@ func main() {
 		port = defaultPort
 	}
 
-	c := graph.Config{Resolvers: &graph.Resolver{ Store: store }}
+	c := graph.Config{Resolvers: &graph.Resolver{ 
+		Store: store,
+		Maker: maker,
+		Config: config,
+	}}
 	c.Directives.Binding = directives.Binding
 
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(c))
