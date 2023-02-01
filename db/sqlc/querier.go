@@ -11,6 +11,7 @@ import (
 type Querier interface {
 	CreateCategory(ctx context.Context, arg CreateCategoryParams) (RecipeCategory, error)
 	GetCategories(ctx context.Context) ([]RecipeCategory, error)
+	GetUser(ctx context.Context, id string) (User, error)
 	GetUserByIdent(ctx context.Context, email string) (User, error)
 	RegisterUser(ctx context.Context, arg RegisterUserParams) (User, error)
 }

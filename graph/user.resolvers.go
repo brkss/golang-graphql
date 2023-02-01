@@ -9,9 +9,11 @@ import (
 
 	db "github.com/brkss/golang-graphql/db/sqlc"
 	"github.com/brkss/golang-graphql/graph/model"
+	middleware "github.com/brkss/golang-graphql/middlewares"
 	"github.com/brkss/golang-graphql/utils"
 	validator "github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
+	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
 // Register is the resolver for the register field.
@@ -78,7 +80,23 @@ func (r *mutationResolver) Login(ctx context.Context, input *model.LoginUserInpu
 // Me is the resolver for the Me field.
 func (r *queryResolver) Me(ctx context.Context) (*model.User, error) {
 
-	return nil, nil
+	payload := middleware.GetPayload(ctx)
+	
+	user, err := r.Store.GetUser(ctx, payload.UserID) 
+	if err != nil {
+		return nil, &gqlerror.Error{
+			Message: "user not found !",
+		}
+	}
+
+	result := model.User{
+		ID: user.ID,
+		Name: user.Name,
+		Email: user.Email,
+		Username: user.Username,
+	}
+
+	return &result, nil
 	//panic(fmt.Errorf("not implemented: Me - Me"))
 }
 

@@ -9,6 +9,26 @@ import (
 	"context"
 )
 
+const getUser = `-- name: GetUser :one
+SELECT id, name, email, username, password, created_at FROM users
+WHERE id = $1
+LIMIT 1
+`
+
+func (q *Queries) GetUser(ctx context.Context, id string) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUser, id)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Email,
+		&i.Username,
+		&i.Password,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
 const getUserByIdent = `-- name: GetUserByIdent :one
 SELECT id, name, email, username, password, created_at FROM users
 WHERE 
